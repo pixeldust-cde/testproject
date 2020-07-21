@@ -8,8 +8,6 @@ import (
 	"strings"
 )
 
-jobs := make(chan int, 100)
-results := make(chan int, 100)
 
 func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
@@ -26,6 +24,11 @@ func fib(n int) int{
 	return fib(n-1) + fib(n -2)
 }
 
+func worker(jobs <-chan int, results chan<- int){
+	for n:= range jobs {
+		results <- fib(n)
+	}
+}
 
 type responseJSON struct {
 	Number int `json:"result"`
@@ -48,7 +51,8 @@ func handleRequests(){
 	log.Fatal(http.ListenAndServe(":8081", myRouter))
 }
 
-
 func main(){
+	jobs := make(chan int, 100)
+	results := make(chan int, 100)
 	handleRequests()
 }
