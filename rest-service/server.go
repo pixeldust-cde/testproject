@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"github.com/gorilla/mux"
 	"strconv"
-	"strings"
 )
 
 
@@ -16,18 +15,11 @@ func enableCors(w *http.ResponseWriter) {
     (*w).Header().Set("Access-Control-Allow-Headers", "*")
 }
 
-
 func fib(n int) int{
 	if n <= 1 {
 		return n
 	}
 	return fib(n-1) + fib(n -2)
-}
-
-func worker(jobs <-chan int, results chan<- int){
-	for n:= range jobs {
-		results <- fib(n)
-	}
 }
 
 type responseJSON struct {
@@ -36,8 +28,10 @@ type responseJSON struct {
 
 func getFib(w http.ResponseWriter, r *http.Request){
 	enableCors(&w)
+	//get stuff from endpoint body
+	//TODO we should be checking we didn't get back junk from this header
 	iteration, _ := strconv.Atoi(r.Header.Get("iteration"))
-	if iteration >= 0 &&  {
+	if iteration >= 0 {
 			res := fib(iteration)
 			fmt.Fprintf(w, strconv.Itoa(res))
 		}else {
@@ -52,7 +46,5 @@ func handleRequests(){
 }
 
 func main(){
-	jobs := make(chan int, 100)
-	results := make(chan int, 100)
 	handleRequests()
 }
