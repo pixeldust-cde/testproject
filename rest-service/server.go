@@ -14,10 +14,14 @@ func enableCors(w *http.ResponseWriter) {
 }
 
 func fib(n int) int{
-	if n == 1 || n == 0 {
-		return 1
+	if n <= 1 {
+		return n
 	}
 	return fib(n-1) + fib(n -2)
+}
+
+type responseJSON struct {
+	Number int `json:"result"`
 }
 
 func getFib(w http.ResponseWriter, r *http.Request){
@@ -25,7 +29,7 @@ func getFib(w http.ResponseWriter, r *http.Request){
 	//get stuff from endpoint body
 	//TODO we should be checking we didn't get back junk from this header
 	iteration, _ := strconv.Atoi(r.Header.Get("iteration"))
-	if iteration > 0 {
+	if iteration >= 0 {
 			res := fib(iteration)
 			fmt.Fprintf(w, strconv.Itoa(res))
 		}else {
