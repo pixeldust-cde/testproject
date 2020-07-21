@@ -11,6 +11,8 @@ import (
 func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Expose-Headers", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "*")
+    (*w).Header().Set("Access-Control-Allow-Headers", "*")
 }
 
 func fib(n int) int{
@@ -39,7 +41,7 @@ func getFib(w http.ResponseWriter, r *http.Request){
 
 func handleRequests(){
 	myRouter :=mux.NewRouter().StrictSlash(true)
-	myRouter.HandleFunc("/fib/v1/iterate", getFib).Methods("GET")
+	myRouter.HandleFunc("/fib/v1/iterate", getFib)
 	log.Fatal(http.ListenAndServe(":8081", myRouter))
 }
 
