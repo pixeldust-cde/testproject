@@ -26,11 +26,6 @@ func fib(n int) int{
 	return fib(n-1) + fib(n -2)
 }
 
-func worker(){
-	for n:= range jobs {
-		results <- fib(n)
-	}
-}
 
 type responseJSON struct {
 	Number int `json:"result"`
@@ -40,10 +35,8 @@ func getFib(w http.ResponseWriter, r *http.Request){
 	enableCors(&w)
 	iteration, _ := strconv.Atoi(r.Header.Get("iteration"))
 	if iteration >= 0 &&  {
-
 			res := fib(iteration)
 			fmt.Fprintf(w, strconv.Itoa(res))
-		
 		}else {
 			http.Error(w, "Bad Request", http.StatusBadRequest)
 		}
@@ -56,11 +49,6 @@ func handleRequests(){
 }
 
 
-
 func main(){
-	go worker()
-	go worker()
-	go worker()
-	go worker()
 	handleRequests()
 }
